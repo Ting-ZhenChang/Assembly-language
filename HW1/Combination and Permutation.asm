@@ -7,6 +7,8 @@ strC: .string "C(M,N) = "
 strH: .string "H(M,N) = "
 strPow: .string "M^N = " 
 strLine: .string "\n"
+strError: .string "No Output"
+
 
 .text
 main:
@@ -106,6 +108,16 @@ main:
 		li a7, 4 # 4 = print P(M,N)  = 
 		ecall
 		
+		#  印 P noOutput 條件,  
+		li t1, 13
+		mv a0, s0 # a0 = M
+		blez s0, noOutput # if  M <=  0, noOutput
+		bltz s1, noOutput # if  N < 0, noOutput
+		beqz s1, output1 # if N == 0, output is 1
+		blt s0, s1, noOutput # if M < N, noOutput
+		bge s0, t1, noOutput # if M >= 13, noOutput
+		
+		
 		div t1, s2, s4 # t1 = M! / (M - N)!
 		
 		mv a0, t1 # t1 = a0
@@ -117,6 +129,16 @@ main:
 		la a0, strC
 		li a7, 4 # 4 = print C(M,N) = 
 		ecall
+		
+		#  印 C noOutput 條件: 
+		li t1, 13
+		mv a0, s0 # a0 = M
+		blez s0, noOutput # if  M <=  0, noOutput
+		bltz s1, noOutput # if  N <  0, noOutput
+		beqz s1, output1 # if N == 0, output is 1
+		beq	s0, s1, output1 # if M == N, output is 1
+		blt s0, s1, noOutput # if M < N, noOutput
+		bge s0, t1, noOutput # if M >= 13, noOutput
 		
 		mul t1, s3, s4 # t1 = (M - N)! * N!
 		div t1, s2, t1 # t1 =  M! /  (M - N)! * N!
@@ -130,6 +152,13 @@ main:
 		la a0, strH
 		li a7, 4 # 4  = print H(M,N) = 
 		ecall
+		
+		#  印 C noOutput 條件: 
+		li t1, 13 # t1 = 13
+		blez s0, noOutput # if M <= 0, noOutput
+		bltz s1, noOutput # if N < 0, noOutput
+		beqz s1, output1 # if N == 0, output must 1
+		bge s0, t1, noOutput # if M >= 13, noOutput
 		
 		mul t0, s0, s5 # t0 = M * (M  + N -1)! 
 		mul t1, s2, s3 # t1 = M! * N!
@@ -155,11 +184,30 @@ main:
 		li a7, 4 # 4 = print M^N = 
 		ecall
 		
+		#  印 Power noOutput 條件: 
+		bltz s0, noOutput # if M < 0, no output
+		bltz s1, noOutput # if N < 0, no output
+		or t0, s0, s1 # t0 = M | N, if t0 == 0, M == 0 and N == 0
+		beqz t0, noOutput # if M == 0 and N == 0, no output
+		beqz s1, output1 # if N == 0 and M >0 , output must 1
+		
 		mv a0, s6 # a0 = M^N
 		li a7, 1 # 1 = print the interger
 		ecall
 		ret
 		
+	noOutput:
+		la a0, strError # a0 = No Output 
+		li a7, 4	# 4 = print No Output
+		ecall
+		jr ra
+	
+	output1:	
+		li a0, 1 #  a0 = 1
+		li a7, 1 # 1 = print a0
+		ecall
+		jr ra
+
 	end:
 		li a7, 10 #  10 = exit the program
 		ecall
