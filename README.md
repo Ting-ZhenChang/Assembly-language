@@ -4,6 +4,7 @@
 
 - 使用RISC-V認識計算機概論和組合語言
 - 利用RISC-V的一些basic指令去解決問題
+- 使用RARS實作
 
 ## 使用RARS
 
