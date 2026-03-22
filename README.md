@@ -8,15 +8,44 @@
 
 ## 使用RARS
 
-STEP 1: 確認java版本且環境
+STEP 1: 確認java版本環境
 
 <img width="1779" height="665" alt="螢幕擷取畫面 2026-03-10 190848" src="https://github.com/user-attachments/assets/5da9bbc4-d601-43e4-b27d-2eeb785fd330" />
+
 
 STEP 2: 開空白文件
 
 STEP 3: 完成程式碼後，save as檔案
 
 STEP 4: 組譯 > Run
+
+
+
+如要開啟舊檔:
+
+ ```text
+
+RARS 是用 Java 寫的， 所以 rars_27a7c1f.jar 是RISC-V 模擬器
+
+負責:
+- 讀 .asm
+- 組譯（assemble）
+- 模擬 CPU 執行
+
+.asm = 原始碼，所以必須依靠RARS開啟
+
+```
+👉 Step 1：開 RARS
+
+ ```text
+java -jar rars_27a7c1f.jar
+ ```
+👉 Step 2：在 RARS 裡面
+File → Open
+
+```text
+XXX.asm
+```
 
 ## 常用basic instructions / syscalls / pseudo instructions
 
