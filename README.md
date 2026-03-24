@@ -62,7 +62,7 @@ XXX.asm
 ||mv a0,t1 <br> li a7, 1 <br> ecall <br> ret || a0 = t1 <br> 1 = 印出a0的數字 |
 |bge t0, t4, end|||t0 >= t4, 就結束程式|
 |blt s0, s1, noOutput|||( branch if less than), s0 < s1, 則noOutput|
-|addi t0, to, 1|||t0 = t0++ |
+|addi t0, t0, 1|||t0 = t0++ |
 ||mv a0, t0 <br> li a7, 1 <br> ecall | | a0 = t0 <br> 1 = 把a0裡的數字印出來 |
 |||blez s0, noOutput|( branch if less than or equal to zero ), s0 <= 0, 則noOuput|
 |||bltz s1, noOutput|( branch if less than zero ), s1 < 0, 則noOuput|
