@@ -42,8 +42,6 @@ main:
 	
 	jal compute ###算出N, n1, n2, n3
 	
-	jal computeInverse ### 算 inverse
-	
 	jal printMagic ### 印出 magic numbers的值
 	
 	jal computeAns
@@ -104,68 +102,6 @@ compute:
 	mv s9, t3 ### s9 = n3
 	ret
 
-inverse:
-	mv t0, a0 ### t0 = n1 mod d1
-	mv t1, a1 ### t1 = d1
-	
-	li t2, 0 ### t2 = 0
-	li t3, 1 ### t3 = 1
-	
-loop_inv:
-	beqz t1, end_inv
-	
-	div t4, t0, t1 ### q
-	rem t5, t0, t1 ### r
-	
-	mv t0, t1
-	mv t1, t5
-	
-	mul t6, t4, t2
-	sub t6, t3, t6
-	
-	mv t3, t2
-	mv t2, t6
-	
-	j loop_inv
-
-end_inv:
-	mv a0, t3 ### 迴圈結束時, a0 = -1
-	ret	
-
-
-computeInverse:
-	rem a0, s7, s0 ### a0 = n1 mod d1
-	mv a1, s0 ### a1 = d1
-	jal inverse
-	mv t0, a0 ### t0 = -1
-	
-	rem t0, t0, s0      ### t0 = inverse mod d1
-	add t0, t0, s0      ### 避免負數
-	rem t0, t0, s0
-	mul s7, s7, t0 ### s7 = magic1
-	
-	rem a0, s8, s1 ### a0 = n2 mod d2
-	mv a1, s1 ### a1 = d2
-	jal inverse
-	mv t0, a0 
-	
-	rem t0, t0, s1      ### t0 = inverse mod d2
-	add t0, t0, s1      ### 避免負數
-	rem t0, t0, s1
-	mul s8, s8, t0 ### s8 = magic2
-	
-	rem a0, s9, s2 ### a0 = n3 mod d3
-	mv a1, s2 ### a1 = d3
-	jal inverse
-	mv t0, a0 
-	
-	rem t0, t0, s2      ### t0 = inverse mod d3
-	add t0, t0, s2      ### 避免負數
-	rem t0, t0, s2
-	mul s9, s9, t0 ### s9 = magic3
-	
-	ret
-
 	
 printMagic:
 	la a0, msg_magic
@@ -210,8 +146,7 @@ computeAns:
 	add t0, t0, t2 ### t0 = (r1*n1) + (r2*n2) + (r3*n3) = answer
 	
 	rem s10, t0, s6 ### s10 = answer mod N,  rem之後的結果表示remainder
-	add s10, s10, s6
-	rem s10, s10, s6
+	
 	ret
 finalAns:
 	la a0, msg_ans
@@ -225,5 +160,4 @@ finalAns:
 end:
 	li a7, 10
 	ecall
-
 
