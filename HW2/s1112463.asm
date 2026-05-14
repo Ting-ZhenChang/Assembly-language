@@ -14,7 +14,7 @@ msg_ans: .string "\nanswer="
 
 .text
 main:
-	jal printID	### print 1112463
+	jal printID	### print s1112463
 	
 	jal printD1
 	jal input
@@ -90,18 +90,71 @@ input:
 	ecall
 	ret
 compute:
-	mul t0, s0, s1 ### t0 = d1 * d2
-	mul s6, t0, s2 ### s6 = d1 * d2 * d3 = N
-	
-	div t1, s6, s0 ###  t1 = M / d1  = n1
-	div t2, s6, s1 ###  t2 = M / d2  = n2
-	div t3, s6, s2 ### t3 = M / d3   = n3
-	
-	mv s7, t1 ### s7 = n1
-	mv s8, t2 ### s8 = n2
-	mv s9, t3 ### s9 = n3
-	ret
+	### N = d1*d2*d3
+	mul t0, s0, s1
+	mul s6, t0, s2      ### s6 = N
 
+	### n1 = N/d1
+	div t1, s6, s0
+
+	### n2 = N/d2
+	div t2, s6, s1
+
+	### n3 = N/d3
+	div t3, s6, s2
+
+	# ## find  n1 mod d1 的 inverse
+	rem t4, t1, s0      ### t4 = n1 mod d1
+	li t5, 1           
+
+findInv1:
+	mul t6, t4, t5
+	rem t6, t6, s0
+
+	li t0, 1
+	beq t6, t0, doneInv1
+
+	addi t5, t5, 1
+	j findInv1
+
+doneInv1:
+	mul s7, t1, t5   ### magic1 = n1 * inverse
+
+	### find  n2 mod d2 的 inverse
+	rem t4, t2, s1
+	li t5, 1
+
+findInv2:
+	mul t6, t4, t5
+	rem t6, t6, s1
+
+	li t0, 1
+	beq t6, t0, doneInv2
+
+	addi t5, t5, 1
+	j findInv2
+
+doneInv2:
+	mul s8, t2, t5  ### magic2
+	
+	### find n3 mod d3 的 inverse
+	rem t4, t3, s2
+	li t5, 1
+
+findInv3:
+	mul t6, t4, t5
+	rem t6, t6, s2
+
+	li t0, 1
+	beq t6, t0, doneInv3
+
+	addi t5, t5, 1
+	j findInv3
+
+doneInv3:
+	mul s9, t3, t5  ### magic3
+
+	ret
 	
 printMagic:
 	la a0, msg_magic
