@@ -8,7 +8,7 @@
 
 ## 使用RARS
 
-STEP 1: 確認java版本環境
+STEP 1: 打開powershell，並確認java版本環境
 
 <img width="1779" height="665" alt="螢幕擷取畫面 2026-03-10 190848" src="https://github.com/user-attachments/assets/5da9bbc4-d601-43e4-b27d-2eeb785fd330" />
 
